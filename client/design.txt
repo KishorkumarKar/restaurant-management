@@ -1,0 +1,117 @@
+User
+├─ _id
+├─ name
+├─ email
+├─ phone
+├─ type → customer | restaurant_admin | delivery_partner | super_admin
+├─ isActive
+├─ createdAt
+├─ password
+
+
+Restaurant
+├─ _id
+├─ name
+├─ description
+├─ ownerId → User._id
+├─ address
+│   ├─ street
+│   ├─ city
+│   ├─ state
+│   ├─ pincode
+│   └─ geoLocation (lat, lng)
+├─ cuisines → ["Indian", "Chinese"]
+├─ isOpen
+├─ rating
+├─ deliveryTime (mins)
+├─ createdAt
+
+
+RestaurantStaff
+├─ _id
+├─ userId → User._id
+├─ restaurantId → Restaurant._id
+├─ role → manager | chef | cashier
+├─ isActive
+
+
+
+Category
+├─ _id
+├─ restaurantId → Restaurant._id
+├─ name → "Starters", "Main Course"
+├─ isActive
+
+
+
+MenuItem
+├─ _id
+├─ restaurantId → Restaurant._id
+├─ categoryId → Category._id
+├─ name
+├─ description
+├─ price
+├─ image
+├─ isVeg
+├─ isAvailable
+
+
+
+Cart
+├─ _id
+├─ userId → User._id
+├─ restaurantId → Restaurant._id
+├─ items
+│   ├─ menuItemId
+│   ├─ name
+│   ├─ price
+│   ├─ quantity
+├─ totalAmount
+├─ updatedAt
+
+
+
+Order
+├─ _id
+├─ orderNumber
+├─ userId → User._id
+├─ restaurantId → Restaurant._id
+├─ items
+│   ├─ menuItemId
+│   ├─ name
+│   ├─ price
+│   ├─ quantity
+├─ totalAmount
+├─ status → placed | preparing | ready | picked | delivered | cancelled
+├─ paymentStatus → pending | paid
+├─ deliveryAddress
+├─ createdAt
+
+
+
+Payment
+├─ _id
+├─ orderId → Order._id
+├─ userId → User._id
+├─ method → UPI | Card | COD
+├─ amount
+├─ status → success | failed
+├─ transactionId
+
+
+
+DeliveryPartner
+├─ _id
+├─ userId → User._id
+├─ isAvailable
+├─ currentLocation
+
+
+
+User ──▶ Cart ──▶ Order ──▶ Payment
+User ──▶ places ──▶ Order
+
+Restaurant ──▶ Category ──▶ MenuItem
+Restaurant ──▶ receives ──▶ Order
+
+Order ──▶ assigned ──▶ DeliveryPartner
