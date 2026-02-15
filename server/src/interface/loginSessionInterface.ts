@@ -8,8 +8,8 @@ export interface ILoginSessionInterface {
 
 
 export interface IJwtTokenResponseTypeInterface {
-    name: string,
-    email: string,
+    name?: string,
+    email?: string,
     id: string,
     type: string,
     iat?: number,
