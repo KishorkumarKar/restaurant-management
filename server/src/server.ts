@@ -6,6 +6,7 @@ import config from "./config";
 import indexRoute from "./routes";
 import mongoose from "./config/mongooseConfig";
 import logger from "./util/loggerUtil";
+import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware";
 
 const app = express();
 
@@ -26,6 +27,11 @@ app.use(express.json());
 //---------middleware-------
 //---------Route-------
 indexRoute(app);
+
+
+//---------error handler-------
+app.use(errorHandlerMiddleware);
+//---------error handler-------
 
 const collectServer = async () => {
     try {

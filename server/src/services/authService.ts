@@ -22,3 +22,7 @@ export const validateCustomerLogin = async (loginData: IUserLogin): Promise<{ to
     }
     return { token: token, type: type };
 }
+
+export const isTokenValid =async(token:string)=>{
+    return LoginSessionServerModel.findOne({token:token});
+}

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { IUser } from "../interface/userInterface";
+import { IJwtTokenResponseTypeInterface } from "../interface/loginSessionInterface";
 
 export const hashThePassword = (password: string): string => {
   const salt = bcrypt.genSaltSync(config.saltRound);
@@ -25,6 +26,6 @@ export const getWebToken = async (
   return jwt.sign(data, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
 };
 
-export const verifyToken = async (token: string) => {
-  return jwt.verify(token, config.jwtSecret);
+export const verifyToken = (token: string): IJwtTokenResponseTypeInterface => {
+  return jwt.verify(token, config.jwtSecret) as IJwtTokenResponseTypeInterface;
 };

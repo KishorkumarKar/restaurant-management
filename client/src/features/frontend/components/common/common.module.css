@@ -1,0 +1,17 @@
+.homeHeaderBorderColor {
+    border-color: #e8ebeb;
+}
+
+.homeHeaderBorderColor:hover * {
+    cursor: pointer;
+    border-color: #dbdddd;
+}
+
+.homeHeaderBorderColorSearch {
+    border-color: #e8ebeb;
+}
+
+.homeHeaderBorderColorSearch:hover {
+    cursor: text;
+    border-color: #dbdddd;
+}
