@@ -4,4 +4,5 @@ import { multerMiddleWare } from "../middlewares/importMiddleware";
 import { validateUser } from "../middlewares/authMiddleware";
 const router = express.Router();
 router.route("/category").post(validateUser, multerMiddleWare("upload_file"), ImportController.importCategory);
+router.route("/tag").post(validateUser, multerMiddleWare("upload_file"), ImportController.importTag);
 export default router;
