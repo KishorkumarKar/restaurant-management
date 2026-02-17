@@ -81,6 +81,7 @@ userSchema.set("toJSON", {
 
 
 userSchema.pre("save", async function (next) {
+    if (!this.isNew) return;
     if (this.isModified("password")) {
         this.password = await hashThePassword(this.password);
     }

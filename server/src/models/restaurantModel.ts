@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { IRestaurant, IRestaurantCategory, IRestaurantTag } from "../interface/restaurantInterface";
+import { findOneAndUpdateCounter } from "../services/counterService";
 
 interface IRestaurantDoc extends Omit<IRestaurant, "id">, mongoose.Document {
 }
@@ -68,7 +69,12 @@ const restaurantSchema = new mongoose.Schema<IRestaurantDoc>({
     timestamps: true
 });
 
-
+restaurantSchema.pre("save", async function () {
+    if (!this.isNew) return;
+    const counter = await findOneAndUpdateCounter("restaurant");
+    const paddedNumber = String(counter.seq).padStart(2, "0");
+    this.code = `RES_${paddedNumber}`;
+});
 
 // Generic helper type for Mongoose toJSON transform
 type ToJSONTransform<T> = (

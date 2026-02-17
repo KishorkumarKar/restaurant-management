@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import csv from "csv-parser";
 import fs from "fs";
+import { IRestaurant } from "../interface/restaurantInterface";
 
 export const importFromCSV = async <T>(
     req: Request,
