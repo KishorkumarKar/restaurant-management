@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { authServerLogoutUserAction } from "@/features/auth/server/auth.actions";
+import Link from "next/link";
 
 const BackendCommonComponentsSidebar = () => {
   const Router = useRouter();
@@ -18,8 +19,8 @@ const BackendCommonComponentsSidebar = () => {
       <div className="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
         <ul className="space-y-2 font-medium">
           <li>
-            <a
-              href="#"
+            <Link
+              href="/admin/dashboard"
               className="flex items-center px-2 py-1.5 text-body rounded-3xl hover:bg-neutral-tertiary hover:text-fg-brand group"
             >
               <svg
@@ -47,7 +48,7 @@ const BackendCommonComponentsSidebar = () => {
                 />
               </svg>
               <span className="ms-3">Dashboard</span>
-            </a>
+            </Link>
           </li>
           <li>
             <button
@@ -225,6 +226,51 @@ const BackendCommonComponentsSidebar = () => {
               </svg>
               <span className="flex-1 ms-3 whitespace-nowrap">Products</span>
             </a>
+          </li>
+          <li>
+            <Link
+              href="/import"
+              className="flex items-center px-2 py-1.5 text-body rounded-3xl hover:bg-neutral-tertiary hover:text-fg-brand group"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0A1.7 1.7 0 0 0 9 3.1V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0A1.7 1.7 0 0 0 21 9h.1a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1z" />
+              </svg>
+
+              <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/import"
+              className="flex items-center px-2 py-1.5 text-body rounded-3xl hover:bg-neutral-tertiary hover:text-fg-brand group"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z" />
+              </svg>
+
+              <span className="flex-1 ms-3 whitespace-nowrap">Import</span>
+            </Link>
           </li>
           <li>
             <a

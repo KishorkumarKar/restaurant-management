@@ -6,4 +6,5 @@ const router = express.Router();
 router.route("/category").post(validateUser, multerMiddleWare("upload_file"), ImportController.importCategory);
 router.route("/tag").post(validateUser, multerMiddleWare("upload_file"), ImportController.importTag);
 router.route("/restaurant").post(validateUser, multerMiddleWare("upload_file"), ImportController.importRestaurant);
+router.route("/download/:type").get(validateUser, ImportController.download);
 export default router;

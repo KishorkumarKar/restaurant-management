@@ -9,6 +9,12 @@ export const API_URL = {
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
     LOGOUT: "/auth/logout",
+    IMPORT: {
+        tag: "/admin/import/tag",
+        category: "/admin/import/category",
+        restaurant: "/admin/import/restaurant",
+        DOWNLOAD: "/admin/import/download/",
+    }
 }
 
 export const JWT_EXPIRE_TIME = (Number(process.env.JWT_EXPIRE_MINUTES) || 20) as number * 60; // in second

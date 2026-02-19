@@ -4,9 +4,11 @@ import { ICategory } from "../interface/categoryInterface";
 import { addCategory } from "../services/categoryService";
 import { ITag } from "../interface/tagInterface";
 import { addTag } from "../services/tagService";
-import { importFromCSV } from "../util/importUtils";
+import { downloadSampleFile, importFromCSV } from "../util/importUtils";
 import { IRestaurant } from "../interface/restaurantInterface";
 import { addImporterData, addRestaurant,formatTheRequestPayload } from "../services/restaurantService";
+import path from "path";
+import fs from "fs";
 
 export const importCategory = expressAsyncHandler(
     async (req: Request, res: Response) => {
@@ -23,5 +25,11 @@ export const importTag = expressAsyncHandler(
 export const importRestaurant = expressAsyncHandler(
     async (req: Request, res: Response) => {
         return importFromCSV<IRestaurant>(req, res, addImporterData);
+    }
+);
+
+export const download= expressAsyncHandler(
+    async (req: Request, res: Response) => {
+        return downloadSampleFile<IRestaurant>(req, res);
     }
 );

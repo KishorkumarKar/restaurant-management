@@ -1,6 +1,6 @@
 import BackendCommonComponentsSidebar from "@/features/backend/common/components/sidebar";
 
-export default function Page() {
+export default function DashboardPage() {
   return (
     <>
       <button

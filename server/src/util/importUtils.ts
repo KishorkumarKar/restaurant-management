@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import csv from "csv-parser";
 import fs from "fs";
 import { IRestaurant } from "../interface/restaurantInterface";
+import path from "path";
 
 export const importFromCSV = async <T>(
     req: Request,
@@ -53,3 +54,33 @@ export const importFromCSV = async <T>(
             });
         });
 };
+
+
+export const downloadSampleFile = async <T>(
+    req: Request,
+    res: Response
+): Promise<void> => {
+
+    const { type } = req.params;
+    let filePath = "";
+    if (type == "tag") {
+        filePath = path.join(process.cwd(), "files/tag.csv");
+    }
+    else if (type == "category") {
+        filePath = path.join(process.cwd(), "files/category.csv");
+    }
+    else if (type == "restaurant") {
+        filePath = path.join(process.cwd(), "files/restaurant.csv");
+    } else {
+        res.status(404).json({ status: false, message: "Invalid Request" });
+        return;
+    }
+
+    if (!fs.existsSync(filePath)) {
+        res.status(404).json({ status: false, message: "File not found" });
+        return;
+    }
+    res.download(filePath);
+};
+
+
