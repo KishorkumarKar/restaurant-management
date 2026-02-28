@@ -1,5 +1,4 @@
 import AdminImportForm from "@/features/backend/admin/components/import-form";
-import BackendCommonComponentsSidebar from "@/features/backend/common/components/sidebar";
 
 import type { Metadata } from "next";
 
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 export default function ImportPage() {
   return (
     <>
-      <BackendCommonComponentsSidebar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 flex flex-col justify-center items-center">
           <div>

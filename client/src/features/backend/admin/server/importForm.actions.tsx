@@ -2,8 +2,7 @@
 import { API, API_URL } from "@/config";
 import {
   adminImportType,
-  adminImportResponseType,
-  downloadFileType,
+  adminImportResponseType
 } from "../types/importForm.type";
 import {
   destroyLoginSession,

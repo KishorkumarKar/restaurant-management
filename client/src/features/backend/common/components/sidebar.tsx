@@ -1,15 +1,48 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { authServerLogoutUserAction } from "@/features/auth/server/auth.actions";
+import {
+  authServerLogoutUserAction,
+  validateUser,
+} from "@/features/auth/server/auth.actions";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getSidebarLink } from "../server/sidebar.actions";
+import { RoutesConfig, Role } from "../types/common.types";
 
 const BackendCommonComponentsSidebar = () => {
+  const router = useRouter();
+  const [sideBarLink, setSideBarLink] = useState<RoutesConfig>({});
+  const [userRole, setUserRole] = useState<Role | string>("");
   const Router = useRouter();
   const logoutUserAction = async () => {
     await authServerLogoutUserAction();
     Router.push("/login");
   };
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const loginData = await validateUser();
+        if (loginData.type) {
+          setUserRole(loginData.type as Role);
+        }
+        const links = await getSidebarLink();
+        setSideBarLink(links);
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === "ACCESS_DENIED") {
+            router.replace("/login");
+          }
+          console.log("Error", error.message);
+        } else {
+          console.log("Error", error);
+        }
+      }
+    };
+
+    fetchLinks();
+  }, []);
   return (
     <aside
       id="cta-button-sidebar"
@@ -50,6 +83,88 @@ const BackendCommonComponentsSidebar = () => {
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
+
+          {sideBarLink && (
+            <>
+              {Object.entries(sideBarLink).map(([moduleKey, moduleValue]) => {
+                const visiblePermissions =
+                  moduleValue.permissions &&
+                  Object.values(moduleValue.permissions).filter(
+                    (perm) =>
+                      perm.show && perm.roles.includes(userRole as Role),
+                  );
+
+                if (
+                  visiblePermissions != undefined &&
+                  visiblePermissions.length === 0
+                )
+                  return null;
+
+                return (
+                  <li key={moduleKey}>
+                    <button
+                      type="button"
+                      className="flex items-center w-full justify-between px-2 py-1.5 text-body rounded-3xl hover:bg-neutral-tertiary hover:text-fg-brand group"
+                      aria-controls="dropdown-example"
+                      data-collapse-toggle="dropdown-example"
+                    >
+                      <svg
+                        className="shrink-0 w-5 h-5 transition duration-75 group-hover:text-fg-brand"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"
+                        />
+                      </svg>
+                      <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                        {moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1)}
+                      </span>
+                      <svg
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="m19 9-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <ul id="dropdown-example" className="py-2 space-y-2">
+                      {visiblePermissions != undefined &&
+                        visiblePermissions.map((perm) => (
+                          <li key={perm.name}>
+                            <Link
+                              href={`${moduleValue.basePath}${perm.path}`}
+                              className="pl-10 flex items-center px-2 py-1.5 text-body rounded-3xl hover:bg-neutral-tertiary hover:text-fg-brand group"
+                            >
+                              {perm.name}
+                            </Link>
+                          </li>
+                        ))}
+                    </ul>
+                  </li>
+                );
+              })}
+            </>
+          )}
+
           <li>
             <button
               type="button"
@@ -79,23 +194,24 @@ const BackendCommonComponentsSidebar = () => {
               </span>
               <svg
                 className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                fill="none"
-                viewBox="0 0 24 24"
               >
                 <path
+                  d="M9 5l7 7-7 7"
                   stroke="currentColor"
+                  strokeWidth={2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="m19 9-7 7-7-7"
                 />
               </svg>
             </button>
-            <ul id="dropdown-example" className="hidden py-2 space-y-2">
+            <ul
+              id="dropdown-example"
+              className="inactive py-2 space-y-2 hidden"
+            >
               <li>
                 <a
                   href="#"
@@ -239,9 +355,9 @@ const BackendCommonComponentsSidebar = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <circle cx="12" cy="12" r="3" />
                 <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0A1.7 1.7 0 0 0 9 3.1V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0A1.7 1.7 0 0 0 21 9h.1a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1z" />
@@ -262,9 +378,9 @@ const BackendCommonComponentsSidebar = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z" />
               </svg>

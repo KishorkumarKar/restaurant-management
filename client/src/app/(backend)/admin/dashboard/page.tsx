@@ -28,7 +28,6 @@ export default function DashboardPage() {
           />
         </svg>
       </button>
-      <BackendCommonComponentsSidebar/>
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-1 border-default border-dashed rounded-3xl">
           <div className="grid grid-cols-3 gap-4 mb-4">

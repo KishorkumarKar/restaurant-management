@@ -29,3 +29,12 @@ export const logout = async (req: Request, res: Response) => {
         }
     )
 };
+
+export const validate = async (req: Request, res: Response) => {
+    console.log("----auth--");
+    return res.status(200).json(
+        {
+            success: true, type: req.user?.type
+        }
+    )
+};
