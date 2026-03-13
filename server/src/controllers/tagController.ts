@@ -5,12 +5,13 @@ import config from "../config";
 
 export const list = expressAsyncHandler(async (req: Request, res: Response) => {
     const pageNumber = req.header("page") ? Number(req.header("page")) : 1;
+    const searchData = req.header("searchData") ? req.header("searchData") : "";
     const countNumber = req.header("count") ? Number(req.header("count")) : config.filterLimit;
-    const tagData = await TagService.list(countNumber, ((pageNumber - 1) * countNumber));
+    const tagData = await TagService.list(countNumber, ((pageNumber - 1) * countNumber), searchData);
     if (tagData) {
         res.status(200).json(
             {
-                success: true, tag: tagData
+                success: true, count: countNumber, tag: tagData
             }
         );
     } else {

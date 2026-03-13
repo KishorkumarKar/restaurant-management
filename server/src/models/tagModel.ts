@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { ITag } from "../interface/tagInterface";
-interface ITagDoc extends Omit<ITag, "id">, mongoose.Document {
+export interface ITagDoc extends Omit<ITag, "id">, mongoose.Document {
 }
 
 const tagSchema = new mongoose.Schema<ITagDoc>({

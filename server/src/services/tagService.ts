@@ -1,5 +1,6 @@
 import { ITag } from "../interface/tagInterface";
-import Tag from "../models/tagModel";
+import Tag, { ITagDoc } from "../models/tagModel";
+import { QueryFilter } from "mongoose";
 
 export const addTag = (data: ITag) => {
     const tagObject = new Tag(data);
@@ -10,10 +11,14 @@ export const getByNames = (names: string[], fields: {} = {}) => {
     return Tag.find({ name: { $in: names } }, fields);
 }
 
-export const list = async (count: number, startFrom: number) => {
+export const list = async (count: number, startFrom: number, searchData: string = "") => {
+    let query: QueryFilter<ITagDoc> = {};
+    if (searchData) {
+        query.name = { $regex: searchData, $options: "i" }; // case-insensitive search
+    }
     const [total, data] = await Promise.all([
-        Tag.find().countDocuments(),
-        Tag.find().limit(count).skip(startFrom).sort({ createdAt: -1 })
+        Tag.countDocuments(query),
+        Tag.find(query).limit(count).skip(startFrom).sort({ createdAt: -1 })
     ])
     return { total, data }
 }

@@ -2,21 +2,26 @@
 import { Column } from "@/hooks/useTable";
 import { useTable } from "@/hooks/useTable";
 import Link from "next/link";
-interface TableProps<T> {
+import { usePathname } from "next/navigation";
+import Button from "@/components/ui/button";
+interface TableProps<T extends { id: string }> {
   title: string;
   page: number;
   size: number;
   totalCount: number;
   description?: string;
+  action?: ("edit" | "delete")[];
   tableColumns: Column<T>[];
   tableData: T[];
   searchKeys: (keyof T)[];
-  getNextData?: (page: number) => void;
+  getNextData?: (page: number, data: string) => void;
+  getSearchData?: (searchData: string) => void;
 }
 
-export function CommonTable<T>({
+export function CommonTable<T extends { id: string }>({
   title,
   description,
+  action,
   tableColumns,
   tableData,
   searchKeys,
@@ -24,7 +29,9 @@ export function CommonTable<T>({
   size,
   totalCount,
   getNextData,
+  getSearchData,
 }: TableProps<T>) {
+  const pathname = usePathname();
   const { columns, data, search, setSearch } = useTable<T>({
     data: tableData,
     searchKeys: searchKeys,
@@ -47,7 +54,6 @@ export function CommonTable<T>({
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-
     return pages;
   };
   return (
@@ -58,12 +64,24 @@ export function CommonTable<T>({
           <p className="text-slate-500">{description}</p>
         </div>
 
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-          className="h-10 px-3 border rounded text-sm"
-        />
+        <div className="w-full flex justify-end">
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+            className="h-10 px-3 border rounded text-sm"
+          />
+
+          {getSearchData && (
+            <Button
+              variant={"search"}
+              type="button"
+              onClick={() => getSearchData(search)}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
       </div>
       <div className="overflow-auto bg-white shadow-md rounded-lg">
         <table className="w-full text-left table-auto">
@@ -77,6 +95,12 @@ export function CommonTable<T>({
                   {col.header}
                 </th>
               ))}
+
+              {action && action.length > 0 && (
+                <th className="p-4 border-b bg-slate-50 text-sm text-slate-500">
+                  Action
+                </th>
+              )}
             </tr>
           </thead>
 
@@ -93,6 +117,21 @@ export function CommonTable<T>({
                       : String(row[col.accessor])}
                   </td>
                 ))}
+
+                {action && action.length > 0 && (
+                  <td className="p-4 border-b text-sm text-slate-700">
+                    {action?.map((actionName) => (
+                      <Link
+                        className="p-2 m-1 border border-dashed rounded-2xl"
+                        key={actionName}
+                        href={`${pathname}/${actionName}/${row.id}`}
+                      >
+                        {actionName.charAt(0).toUpperCase() +
+                          actionName.slice(1)}
+                      </Link>
+                    ))}
+                  </td>
+                )}
               </tr>
             ))}
 
@@ -116,7 +155,7 @@ export function CommonTable<T>({
               {page - 1 >= 1 && (
                 <li>
                   <Link
-                    onClick={() => getNextData?.(page - 1)}
+                    onClick={() => getNextData?.(page - 1, search)}
                     href="#"
                     className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-s-3xl text-sm px-3 h-9 focus:outline-none"
                   >
@@ -128,7 +167,7 @@ export function CommonTable<T>({
                 return (
                   <li key={pagination}>
                     <Link
-                      onClick={() => getNextData?.(pagination)}
+                      onClick={() => getNextData?.(pagination, search)}
                       href="#"
                       className={`flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none ${page == pagination ? "bg-blue-200" : ""} `}
                     >
@@ -137,52 +176,10 @@ export function CommonTable<T>({
                   </li>
                 );
               })}
-
-              {/* <li>
-                <Link
-                  href="#"
-                  className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none"
-                >
-                  1
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none"
-                >
-                  2
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  aria-current="page"
-                  className="flex items-center justify-center text-fg-brand bg-neutral-tertiary-medium box-border border border-gray-300 hover:text-fg-brand font-medium text-sm w-9 h-9 focus:outline-none"
-                >
-                  3
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none"
-                >
-                  4
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none"
-                >
-                  5
-                </Link>
-              </li> */}
               {totalPages != page && totalPages > page && (
                 <li>
                   <Link
-                    onClick={() => getNextData?.(page + 1)}
+                    onClick={() => getNextData?.(page + 1, search)}
                     href="#"
                     className="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-gray-300 hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-e-3xl text-sm px-3 h-9 focus:outline-none"
                   >
