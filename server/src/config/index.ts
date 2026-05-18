@@ -12,7 +12,9 @@ const config = {
         auth: "auth", // for login logout and register
         import: "import",
         tag: "tag",
+        category: "category",
         admin: "admin",
+        user: "user",
     },
     email: {
         host: (process.env.EMAIL_HOST || "in-v3.mailjet.com") as string,

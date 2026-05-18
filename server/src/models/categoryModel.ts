@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { ICategory } from "../interface/categoryInterface";
 
-interface ICategoryDoc extends Omit<ICategory, "id">, mongoose.Document {
+export interface ICategoryDoc extends Omit<ICategory, "id">, mongoose.Document {
 }
 
 const categorySchema = new mongoose.Schema<ICategoryDoc>({

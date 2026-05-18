@@ -1,0 +1,11 @@
+import express from "express";
+import * as TagController from "../../controllers/categoryController";
+import { validateUser } from "../../middlewares/authMiddleware";
+const router = express.Router();
+router.route("/").get(TagController.list);
+// router.route("/").get(validateUser, TagController.list);
+// router.route("/:id").get(validateUser, TagController.download);
+// router.route("/:id").delete(validateUser, TagController.download);
+// router.route("/add").post(validateUser, TagController.importTag);
+// router.route("/update").post(validateUser, TagController.importRestaurant);
+export default router;
