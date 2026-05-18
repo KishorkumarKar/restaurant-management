@@ -1,4 +1,4 @@
-import { JWT_EXPIRE_TIME } from "@/config";
+import { JWT_EXPIRE_TIME,IS_HTTP_SECURE } from "@/config";
 import { LoginResponseAuthType } from "@/features/auth/types/auth.type";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
@@ -8,7 +8,7 @@ export const generateLoginSession = async (loginData: LoginResponseAuthType) => 
     if (loginData?.token) {
         console.log("-----", loginData.token);
         cookieStore.set("session", loginData.token, {
-            secure: true,
+            secure: IS_HTTP_SECURE,
             httpOnly: true,
             maxAge: JWT_EXPIRE_TIME,
         });

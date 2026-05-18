@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import FrontendComponentCommonFooter from "./common/footer";
 import FrontendComponentHomePageHeader from "./common/home-page-header";
 import FrontendComponentHomeCategory from "./home/category";
@@ -7,19 +9,23 @@ import FrontendComponentHomeSpecialOffer from "./home/special-offer";
 import FrontendComponentHomeTag from "./home/tag";
 
 const FrontendComponentHomePage = () => {
+  const [selectedTag, setSelectedTag] = useState("");
   return (
     <>
       {/* HEADER */}
       <FrontendComponentHomePageHeader />
       {/* CATEGORIES */}
       <FrontendComponentHomeCategory />
-      {/* FILTERS */}
-      <FrontendComponentHomeTag/>
+      {/* Tag */}
+      <FrontendComponentHomeTag
+        selectedTag={selectedTag}
+        onTagClick={setSelectedTag}
+      />
       {/* PROMO BANNERS */}
-      <FrontendComponentHomeSpecialOffer/>
+      <FrontendComponentHomeSpecialOffer />
       {/* RESTAURANT GRID */}
-      <FrontendComponentHomeRestaurantScrollerGrid/>
-      <FrontendComponentHomeRestaurantGrid/>
+      <FrontendComponentHomeRestaurantScrollerGrid />
+      <FrontendComponentHomeRestaurantGrid />
       {/* FOOTER */}
       <FrontendComponentCommonFooter />
     </>

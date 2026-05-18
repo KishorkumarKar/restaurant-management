@@ -5,7 +5,7 @@ export const PAGE_SIZE = 10;
 export const ADMIN_USER = "admin";
 export const LOGIN_USER = "user";
 export const API = {
-    BASE_URL: "http://127.0.0.1:5050/",
+    BASE_URL: "http://172.26.80.1:6050/",
     VERSION: "V1",
 }
 export const API_URL = {
@@ -55,3 +55,4 @@ export const ROUTES: RoutesConfig = {
     },
 };
 export const JWT_EXPIRE_TIME = (Number(process.env.JWT_EXPIRE_MINUTES) || 20) as number * 60; // in second
+export const IS_HTTP_SECURE = process.env.IS_HTTP_SECURE !== "false";

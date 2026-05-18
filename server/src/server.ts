@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 const env = dotenv.config();
 import config from "./config";
 import indexRoute from "./routes";
+import dns from "node:dns/promises";
+dns.setServers(["8.8.8.8","1.1.1.1"])
 import mongoose from "./config/mongooseConfig";
 import logger from "./util/loggerUtil";
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware";
