@@ -31,9 +31,8 @@ const FrontendComponentHomeCategory = ({
 
   return (
     <section className="bg-white">
-      {JSON.stringify(categoryList)}
-      <div className="max-w-11/12 mx-auto px-4 py-4 flex gap-6 overflow-x-auto text-sm">
-        <div className="text-center min-w-[70px]">
+      <div className="max-w-11/12 mx-auto px-4 py-4 flex gap-6 overflow-x-auto text-sm lg:min-h-[72px]">
+        {/* <div className="text-center min-w-[70px]">
           🍔<p>Burgers</p>
         </div>
         <div className="text-center min-w-[70px]">
@@ -53,7 +52,18 @@ const FrontendComponentHomeCategory = ({
         </div>
         <div className="text-center min-w-[70px]">
           🌮<p>Mexican</p>
-        </div>
+        </div> */}
+
+        {categoryList.map((category) => (
+          <div
+            onClick={() => onCategoryClick(category.name)}
+            key={category.id}
+            className="text-center min-w-[70px]"
+          >
+            🍜
+            <p>{category.name}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

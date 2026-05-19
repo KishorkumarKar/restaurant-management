@@ -13,6 +13,7 @@ const FrontendComponentHomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   return (
     <>
+      {selectedTag+" "+selectedCategory}
       {/* HEADER */}
       <FrontendComponentHomePageHeader />
       {/* CATEGORIES */}

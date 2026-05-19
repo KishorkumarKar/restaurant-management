@@ -33,7 +33,7 @@ const FrontendComponentHomeTag = ({ selectedTag, onTagClick }: Props) => {
             <span
               key={tag.id}
               className="px-4 py-1 border rounded-full"
-              onClick={() => onTagClick("aa")}
+              onClick={() => onTagClick(tag.name)}
             >
               {tag.name}
             </span>
