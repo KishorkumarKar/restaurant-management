@@ -18,6 +18,11 @@ export const API_URL = {
             list: "/admin/tag"
         }
     },
+    User: {
+        category: {
+            list: "/user/category"
+        }
+    },
     IMPORT: {
         tag: "/admin/import/tag",
         category: "/admin/import/category",

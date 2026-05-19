@@ -13,7 +13,6 @@ const FrontendComponentHomeTag = ({ selectedTag, onTagClick }: Props) => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        console.log("sdasd");
         const tagListData = await getTagList("", 1, 20);
         console.log(tagListData);
         if (tagListData.success && tagListData.tag?.data) {
